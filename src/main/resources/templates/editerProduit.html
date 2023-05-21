@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="template">
+
+<link rel="stylesheet" type="text/css"
+      href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+<head>
+  <meta charset="utf-8">
+  <title>Modifier produit</title>
+
+
+</head>
+<body>
+<div layout:fragment="Mycontent">
+  <div class="container">
+    <div class="card-body">
+
+      <form action="updateProduit" method="GET">
+        <div class="form-group">
+          <label class="control-label font-weight-bolder">Id Produit :</label>
+          <input type="text" name="idProduit" class="form-control" th:value="${produit.idProduit}" readonly/>
+          <label class="control-label font-weight-bolder">Nom Produit :</label>
+          <input type="text" name="nomProduit" class="form-control" th:value="${produit.nomProduit}"/>
+        </div>
+        <div class="form-group">
+          <label class="control-label font-weight-bolder">Prix Produit :</label>
+          <input type="text" name="prixProduit" class="form-control" th:value="${produit.prixProduit}"/>
+        </div>
+        <div class="form-group">
+          <label class="control-label font-weight-bolder">Date création :</label>
+
+          <input class="form-control" type="date" name="date"
+                 th:value="${#dates.format(produit.dateCreation, 'yyyy-MM-dd')}" />
+
+        </div>
+        <div class="mb-3">
+          <label for="categorie_input" class="form-label">Selectionner categorie</label>
+          <select name="categorieProduit" class="form-control" id="categorie_input" required>
+            <option th:if="${produit.idProduit}" th:value="${categorie.idCat}" th:each="categorie: ${categories}"
+                    th:text="${categorie.nomCat}" th:selected="${produit.categorie.idCat == categorie.idCat}">
+            </option>
+            <option th:unless="${produit.idProduit}" th:value="${categorie.idCat}" th:each="categorie: ${categories}"
+                    th:text="${categorie.nomCat}">
+            </option>
+
+          </select>
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary">Modifier</button>
+        </div>
+      </form>
+    </div>
+    <br/><a href="ListeProduits">Liste Produits</a>
+  </div>
+</div>
+</body>
+</html>

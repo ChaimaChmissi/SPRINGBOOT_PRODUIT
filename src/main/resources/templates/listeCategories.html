@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="template">
+
+<link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
+<script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="/webjars/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<head>
+  <meta charset="utf-8">
+  <title>Liste de categories</title>
+</head>
+
+<body>
+<div layout:fragment="Mycontent">
+  <div th:insert="template.html"></div>
+  <br />
+  <br>
+  <br>
+
+  <div class="container">
+
+    <h2 class="display-5 fw-bold">Liste de Categories</h2> <br> <br>
+
+    <div class="card-body">
+      <div th:text="${msg}" th:if="${msg}" class="alert alert-success" role="alert"></div>
+      <div th:if="${searchTerm}" class="alert alert-success" role="alert">
+        <div>
+          Résultats du recherche pour "<span th:text="${searchTerm}"></span>"
+        </div>
+      </div>
+      <form class="bd-search m-3" action="ListeCategoriesByName" method="get">
+        <div class="d-flex justify-content-start w-25">
+          <input type="search" name="nom" class="form-control ds-input" required placeholder="Search..." autocomplete="off">
+          <button type="submit" class="btn btn-primary ms-2">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </form>
+      <table class="table table-striped">
+        <tr>
+          <th>ID</th>
+          <th>Nom Categorie</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+        <tr th:each="categorie: ${categories}">
+          <td th:text="${categorie.idCat}"></td>
+          <td th:text="${categorie.nomCat}"></td>
+          <td th:text="${categorie.descriptionCat}"></td>
+          <td sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{modifierCategorie(id=${categorie.idCat})}"  type="button"
+               title="Edit">
+              <i class="bi bi-pencil-square" style="color: green"></i>
+            </a>
+            <a  onclick="return confirm('Etes-vous sûr ?')"
+               th:href="@{supprimerCategorie(id=${categorie.idCat}, page=${currentPage},size=${size})}"
+               type="button" title="Delete">
+              <i class="bi bi-trash" style="color: red"></i>
+            </a>
+          </td>
+        </tr>
+      </table>
+      <ul class="nav nav-pills">
+        <li th:each="page,status:${pages}">
+          <a th:class="${status.index==currentPage?'btn btn-primary':'btn'}"
+             th:href="@{listeCategories(page=${status.index}, size=${size})}"
+             th:text="${status.index}"></a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+</body>
+
+</html>
